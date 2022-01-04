@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Meeting Details</title>
+{#    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">#}
+{#    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+{#    <script type="text/javascript">#}
+{#        function verify(){#}
+{#            $("#result").empty();#}
+{#            var meetingid = $("#meetingid").val();#}
+{#            $.post("/index/meetings/meetingdetail",{meetingid:meetingid,csrfmiddlewaretoken: '{{ csrf_token }}'},function(result){#}
+{#                    var resultObject = $("#result");#}
+{#                    resultObject.html(result);#}
+{#            });#}
+{##}
+{#        }#}
+{#    </script>#}
+        <script type="text/javascript">
+        function verify(){
+            var table = $("#pstable");
+            table.hide();
+            var meetingid = $("#meetingid").val();
+            $.post("/index/meetings/meetingdetail",{meetingid:meetingid,csrfmiddlewaretoken: '{{ csrf_token }}'},function(ret){
+                    var obj = eval(ret);
+
+			var tbody=$('<tbody></tbody>');
+
+
+			for(var i=0;i<obj.length;i++){
+				var tr=$('<tr></tr>');
+				tr.append('<td>'+ obj[i]['name'] + '</td>' + '<td>'+ obj[i]['jointime'] + '</td>' + '<td>'+ obj[i]['leavetime'] + '</td>' );
+				tbody.append(tr);
+			}
+
+			$('#pstable tbody').replaceWith(tbody);
+            table.show();
+            });
+
+        }
+    </script>
+</head>
+<body>
+    <br>
+    Meeting ID:<input type="text" id = "meetingid" name="meetingid"><br><br>
+{#        <input type="submit" value="Search">#}
+    <input type="button" name="btnVerify" value="Search" onclick="verify()" />
+    <br><br>
+    <div id="result">
+        <table class="gridtable" align="left" id="pstable" border="1">
+<thead>
+            <tr>
+                <th align=center width=100>name</th>
+                <th align=center width=200>jointime</th>
+				<th align=center width=200>leavetime</th>
+            </tr>
+</thead>
+
+<tbody>
+</tbody>
+
+</table>
+    </div>
+
+
+</body>
+</html>
+<style type="text/css">
+  table{display:none;}
+  table.gridtable {
+      font-family: verdana,arial,sans-serif;
+      font-size:11px;
+      color:#333333;
+      border-width: 1px;
+      border-color: #666666;
+      border-collapse: collapse;
+ }
+ table.gridtable th {
+     border-width: 1px;
+     padding: 8px;
+     border-style: solid;
+     border-color: #666666;
+     background-color: #dedede;
+ }
+ table.gridtable td {
+     border-width: 1px;
+     padding: 8px;
+     border-style: solid;
+     border-color: #666666;
+     background-color: #ffffff;
+ }
+ </style>

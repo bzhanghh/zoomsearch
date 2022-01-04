@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Download File From 3rd Website</title>
+</head>
+<body>
+    <form action="{% url 'upload:downloadfrom3page' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!--昵称 ：<input type="text" name="name"><br><br> -->
+        文件链接: &nbsp;<input name="filelink"><br><br>
+        <input type="submit" value="下载">
+    </form>
+</body>
+</html>
