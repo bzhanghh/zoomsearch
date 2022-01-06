@@ -21,22 +21,12 @@
 <table id="mytab" class="table table-hover meeting"></table>
 </body>
 
-{#        <script>#}
-{#var aaa = JSON.parse('{{ datalist|safe }}');#}
-{#          aaa = {{ datalist|safe }}#}
-{#            alert(aaa[0]);#}
-{#        </script>#}
-
 <script type="text/javascript">
     $('#mytab').hide()
     $('#mytab').bootstrapTable({
-        {#全部参数#}
-        {#url: "{% static 'guchen_obj.json' %}",     //请求后台的URL（*）或者外部json文件，json内容若为json数组[{"id": 0,"name": "Item 0","price": "$0"},{"id": 1,"name": "Item 1","price": "$1"}]，#}
-        //且键的名字必须与下方columns的field值一样，同时sidePagination需要设置为client或者直接注释掉，这样前台才能读取到数据，且分页正常。
-        //当json文件内容为json对象时：{"total": 2,"rows": [{"id": 0,"name": "Item 0","price": "$0"},{"id": 1,"name": "Item 1","price": "$1"}]}，
-        //分页要写为server，但是server如果没有处理的话,会在第一页显示所有的数据，分页插件不会起作用
 
-        url: "/index/meetings/meetingdetailtest",                     //从后台获取数据时，可以是json数组，也可以是json对象
+
+        url: "https://a1n8vj4ed6.execute-api.ap-southeast-1.amazonaws.com/default/zoomParticipantSearch",                     //从后台获取数据时，可以是json数组，也可以是json对象
         dataType: "json",
         method: 'get',                      //请求方式（*）
         toolbar: '#toolbar',                //工具按钮用哪个容器
@@ -45,18 +35,15 @@
         pagination: true,                   //是否显示分页（*）
         sortable: true,                     //是否启用排序
         sortOrder: "asc",                   //排序方式
-        {#queryParams: oTableInit.queryParams,//传递参数（*）#}
-        {#sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）,数据为json数组时写client，json对象时（有total和rows时）这里要为server方式，写client列表无数据#}
         pageNumber: 1,                       //初始化加载第一页，默认第一页
         pageSize: 10,                       //每页的记录行数（*）
         pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
-        search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+        search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
         strictSearch: false,
         showColumns: false,                  //是否显示所有的列
         showRefresh: false,                  //是否显示刷新按钮
         minimumCountColumns: 2,             //最少允许的列数
         clickToSelect: true,                //是否启用点击选中行
-        {#height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度#}
         uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
         showToggle: false,                    //是否显示详细视图和列表视图的切换按钮
         cardView: false,                    //是否显示详细视图
@@ -72,7 +59,7 @@
                 sortOrder: params.order, //排位命令（desc，asc）
 
                 //查询框中的参数传递给后台
-                search_kw: $('#search-keyword').val(), // 请求时向服务端传递的参数
+                meetingid: $('#search-keyword').val(), // 请求时向服务端传递的参数
             };
             return query_params;
         },
@@ -82,24 +69,20 @@
 
             {
                 field: 'name',  //返回数据rows数组中的每个字典的键名与此处的field值要保持一致
-                title: 'Participant Name'
+                title: 'Participant Name',
+                sortable: true
             },
             {
                 field: 'jointime',
-                title: 'Join Time'
+                title: 'Join Time',
+                 sortable: true
             },
             {
                 field: 'leavetime',
-                title: 'Leave Time'
+                title: 'Leave Time',
+                 sortable: true
             },
-            {#{#}
-            {#    field: 'operate',#}
-            {#    title: '操作',#}
-            {#    width: 120,#}
-            {#    align: 'center',#}
-            {#    valign: 'middle',#}
-            {#    formatter: actionFormatter,#}
-            {# },#}
+
 
         ],
         formatNoMatches:function(){
@@ -123,7 +106,6 @@
     $(function () {
         $("#search-button").click(function () {
             $('#mytab').bootstrapTable(('refresh')); // 很重要的一步，刷新url！
-            {#$('#search-keyword').val()#}
             $('#mytab').show()
         })
     })
